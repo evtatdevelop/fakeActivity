@@ -1,0 +1,27 @@
+.serverResouce {
+  display: flex;
+  flex-direction: column;
+
+  fieldset {
+    & > div {
+      margin-top: 10px;
+
+      & :first-child {
+        margin-top: 0;
+      }
+
+      & > ul {
+        width: 100%;
+
+        li {
+          display: flex;
+        }
+      }
+    }
+    & > h2 {
+      color: #437ec2;
+      font-size: 18px;
+      font-weight: 700;
+    }
+  }
+}
