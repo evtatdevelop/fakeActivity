@@ -1,8 +1,8 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, } from 'react';
-import { useDispatch } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import styles from './App.module.scss';
-import { getResourceList, getoutlook, getmainpage, getworkplace, getsap, getresource, getjira} from "./appSlice";
+import { getResourceList, setActivity, activity, } from "./appSlice";
 import { getRemote, } from "./features/user/userSlice";
 import { getFilePlaceList, getFileResourcesList, } from './features/fileResouce/fileResourceSlice';
 import { getServerPlaceList, getServerGroupList, getOperSystemsList, getServerResouceList } from './features/serverResouce/serverResourceSlice';
@@ -10,7 +10,8 @@ import { formSubmit } from './appSlice';
 
 function App() {
   const dispatch = useDispatch(); 
-  
+  const actions = useSelector(activity);
+
   const submit = (type_code) => {
     type_code === 'FILE' ? fileSubmit() : serverSubmit();
   }
@@ -61,12 +62,12 @@ function App() {
   
   useEffect(() => {
     let interval = (Math.round(Math.random()*2)+1) * 100000;  
-    console.log(`interval: ${interval}`);
+    dispatch(setActivity(`${new Date().getHours()}:${new Date().getMinutes()} interval: ${interval}`));
     
     setInterval(() => {
       let date = new Date();
       let time = `${date.getHours()}:${date.getMinutes()}`;
-      if ( date.getHours() < 8 || date.getHours() === 12 || date.getHours() > 17 ) console.log('NOWORK');
+      if ( date.getHours() < 8 || date.getHours() === 12 || date.getHours() > 17 ) dispatch(setActivity('NOWORK'));
       else
         if ( Math.round(Math.random()) % 2 ) {
           dispatch(getRemote());
@@ -83,10 +84,10 @@ function App() {
                 dispatch(getServerGroupList());
                 dispatch(getOperSystemsList());
               } else dispatch(getServerResouceList());
-            submit(resurce ? 'FILE' : 'SERVER')
-            console.log(`${time} ${resurce ? 'FILE' : 'SERVER'} - ${action ? "NEW" : "MODIFY"}`);
-          } else console.log(`${time} JUST REMOTE`);
-        } else console.log(`${time} WORK`);
+            setTimeout(() => submit(resurce ? 'FILE' : 'SERVER'), 30000);
+            dispatch(setActivity(`${time} ${resurce ? 'FILE' : 'SERVER'} - ${action ? "NEW" : "MODIFY"}`)); 
+          } else dispatch(setActivity(`${time} JUST REMOTE`)); 
+        } else dispatch(setActivity(`${time} WORK`));
     }, interval)
 
     setInterval(() => window.location.reload(true), 3600 * 1000);
@@ -94,7 +95,9 @@ function App() {
 
   return (
     <div className={styles.app}>
-      Fake Activity
+      <ul>
+        {actions.map((item, index) => <li key={index}>{item}</li>)}
+      </ul>
     </div>
   );
 }

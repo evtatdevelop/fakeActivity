@@ -8,6 +8,9 @@ const initialState = {
   resourceTypes: [],
   resourceType: null,
   order: {},
+
+  activity: [],
+
 }
 
 export const getResourceList = createAsyncThunk( 'app/getResourceList', async () => await getResourceTypes({}) );
@@ -37,6 +40,10 @@ export const appSlice = createSlice({
     setResourceType: (state, action) => {
       state.resourceType = action.payload;
       state.order = {};
+    },
+
+    setActivity: (state, action) => {
+      state.activity = [...state.activity, action.payload];
     },
 
     clearOrder: (state, action) => {
@@ -97,7 +104,7 @@ export const appSlice = createSlice({
   }
 });
 
-export const { setTheme, setLangMode, setResourceType, clearOrder } = appSlice.actions;
+export const { setTheme, setLangMode, setResourceType, clearOrder, setActivity } = appSlice.actions;
 
 export const darkTheme = ( state ) => state.app.darkTheme;
 export const langMode = ( state ) => state.app.langMode;
@@ -105,5 +112,6 @@ export const loading = ( state ) => state.app.loading;
 export const resourceTypes = ( state ) => state.app.resourceTypes;
 export const resourceType = ( state ) => state.app.resourceType;
 export const order = ( state ) => state.app.order;
+export const activity = ( state ) => state.app.activity;
 
 export default appSlice.reducer;
