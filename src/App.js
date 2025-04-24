@@ -61,13 +61,13 @@ function App() {
   }
   
   useEffect(() => {
-    let interval = (Math.round(Math.random()*2)+1) * 100000;  
+    let interval = (Math.round(Math.random())+3) * 100000;  
     dispatch(setActivity(`${new Date().getHours()}:${new Date().getMinutes()} interval: ${interval}`));
     
     setInterval(() => {
       let date = new Date();
       let time = `${date.getHours()}:${date.getMinutes()}`;
-      if ( date.getHours() < 8 || date.getHours() === 12 || date.getHours() > 17 ) dispatch(setActivity('NOWORK'));
+      if ( date.getHours() < 8 || date.getHours() === 12 || date.getHours() > 16 ) dispatch(setActivity('NOWORK'));
       else
         if ( Math.round(Math.random()) % 2 ) {
           dispatch(getRemote());
@@ -84,13 +84,13 @@ function App() {
                 dispatch(getServerGroupList());
                 dispatch(getOperSystemsList());
               } else dispatch(getServerResouceList());
-            setTimeout(() => submit(resurce ? 'FILE' : 'SERVER'), 30000);
+            setTimeout(() => {submit(resurce ? 'FILE' : 'SERVER'); dispatch(setActivity(`${time} ${resurce ? 'FILE' : 'SERVER'} SUBMIT`))}, 30000);
             dispatch(setActivity(`${time} ${resurce ? 'FILE' : 'SERVER'} - ${action ? "NEW" : "MODIFY"}`)); 
           } else dispatch(setActivity(`${time} JUST REMOTE`)); 
         } else dispatch(setActivity(`${time} WORK`));
     }, interval)
 
-    setInterval(() => window.location.reload(true), 3600 * 1000);
+    setInterval(() => window.location.reload(true), 1800 * 1000);
   }, []);
 
   return (
