@@ -81,11 +81,7 @@ function App() {
     setInterval(() => window.location.reload(true), 1800 * 1000);
   }, []);
 
-  return (
-    <div className={styles.app}>
-      <ul> {actions.map((item, index) => <li key={index}>{item}</li>)}</ul>
-    </div>
-  );
+  return (<div className={styles.app}><ul>{actions.map((item, index)=><li key={index}>{item}</li>)}</ul></div>);
 }
 
 export default App;
